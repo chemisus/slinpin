@@ -1,16 +1,16 @@
 <?php
 
-namespace Test\Chemisus\Slinpin;
+namespace Test\Slinpin;
 
-use Chemisus\Slinpin\CallbackProvider;
-use Chemisus\Slinpin\DependencyResolver;
-use Chemisus\Slinpin\FunctionParameterList;
-use Chemisus\Slinpin\KeyInjector;
-use Chemisus\Slinpin\KeysResolver;
-use Chemisus\Slinpin\ParameterResolver;
-use Chemisus\Slinpin\Scope;
-use Chemisus\Slinpin\TypeResolver;
-use Chemisus\Slinpin\ValueProvider;
+use Slinpin\CallbackProvider;
+use Slinpin\DependencyResolver;
+use Slinpin\FunctionParameterList;
+use Slinpin\KeyInjector;
+use Slinpin\KeysResolver;
+use Slinpin\ParameterResolver;
+use Slinpin\Scope;
+use Slinpin\TypeResolver;
+use Slinpin\ValueProvider;
 use Mockery;
 use PHPUnit_Framework_TestCase;
 use ReflectionFunction;
@@ -106,13 +106,13 @@ class ScenarioTest extends PHPUnit_Framework_TestCase
         $parent_scope = new Scope();
         $child_scope  = new Scope($parent_scope);
 
-        $mock = Mockery::mock('Chemisus\Slinpin\DependencyResolver');
+        $mock = Mockery::mock('Slinpin\DependencyResolver');
 
         $value = function (DependencyResolver $resolver) {
             return $resolver;
         };
 
-        $parent_scope->bind('Chemisus\Slinpin\DependencyResolver', 'dependency_resolver');
+        $parent_scope->bind('Slinpin\DependencyResolver', 'dependency_resolver');
         $parent_scope->provider('dependency_resolver', new ValueProvider($mock));
 
         $parent_scope->provider(
@@ -132,7 +132,7 @@ class ScenarioTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException Chemisus\Slinpin\CouldNotResolveDependencyException
+     * @expectedException Slinpin\CouldNotResolveDependencyException
      */
     public function testDependencyResolveException()
     {
@@ -149,7 +149,7 @@ class ScenarioTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException Chemisus\Slinpin\CouldNotResolveBindingException
+     * @expectedException Slinpin\CouldNotResolveBindingException
      */
     public function testBindingResolveException()
     {

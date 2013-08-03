@@ -1,6 +1,6 @@
 <?php
 
-namespace Chemisus\Slinpin;
+namespace Slinpin;
 
 use Exception;
 
