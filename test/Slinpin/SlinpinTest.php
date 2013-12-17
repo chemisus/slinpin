@@ -3,12 +3,11 @@
 namespace Test\Slinpin;
 
 use PHPUnit_Framework_TestCase;
-use Slinpin\Slinpin;
-use Slinpin\FactoryProvider;
 use Slinpin\ReflectionContainer;
+use Slinpin\Slinpin;
 use Slinpin\TypeResolver;
 
-class DependencyContainerTest extends PHPUnit_Framework_TestCase
+class SlinpinTest extends PHPUnit_Framework_TestCase
 {
     public function testValue()
     {
