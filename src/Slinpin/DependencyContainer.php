@@ -20,7 +20,7 @@ class DependencyContainer
     public function get($key)
     {
         if (!isset($this->providers[$key])) {
-            throw new \Exception();
+            throw new DependencyDoesNotExistException();
         }
 
         return $this->providers[$key];

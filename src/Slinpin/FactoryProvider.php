@@ -21,7 +21,7 @@ class FactoryProvider implements Provider
     public function __construct($class_name, ReflectionContainer $reflection_container)
     {
         $this->class_name = $class_name;
-        $this->$reflection_container = $reflection_container;
+        $this->reflection_container = $reflection_container;
     }
 
     public function provide(DependencyContainer $container)

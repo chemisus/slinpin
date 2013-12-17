@@ -55,7 +55,7 @@ class ReflectionContainer
 
     public function instance($class_name, DependencyContainer $dependencies)
     {
-        $reflection = $this->reflection($class_name);
+        $reflection = $this->reflectionClass($class_name);
 
         $keys = $this->type_resolver->resolveConstructor($reflection);
 
@@ -83,6 +83,6 @@ class ReflectionContainer
 
         $parameters = $dependencies->provideAll($keys);
 
-        return $reflection->invoke($parameters);
+        return $reflection->invokeArgs($parameters);
     }
 }
