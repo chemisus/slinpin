@@ -6,9 +6,17 @@ use PHPUnit_Framework_TestCase;
 use Slinpin\ReflectionContainer;
 use Slinpin\Slinpin;
 use Slinpin\TypeResolver;
+use Mockery;
 
 class SlinpinTest extends PHPUnit_Framework_TestCase
 {
+    public function tearDown()
+    {
+        parent::tearDown();
+
+        Mockery::close();
+    }
+
     public function testValue()
     {
         $container = new Slinpin(new ReflectionContainer(new TypeResolver()));
@@ -52,7 +60,7 @@ class SlinpinTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(1, $container->provide('a'));
     }
 
-    public function testInstanceNoCache()
+    public function testFactoryNoCache()
     {
         $container = new Slinpin(new ReflectionContainer(new TypeResolver()));
 
@@ -61,7 +69,7 @@ class SlinpinTest extends PHPUnit_Framework_TestCase
         $this->assertNotSame($container->provide('a'), $container->provide('a'));
     }
 
-    public function testInstance()
+    public function testFactory()
     {
         $container = new Slinpin(new ReflectionContainer(new TypeResolver()));
 
@@ -85,6 +93,17 @@ class SlinpinTest extends PHPUnit_Framework_TestCase
 
         $actual = $container->invoke($resolver, 'resolveMethod');
 
+        $this->assertEquals($expect, $actual);
+    }
+
+    public function testInstance()
+    {
+        $reflection = Mockery::mock('Slinpin\ReflectionContainer');
+        $reflection->shouldReceive('instance')->andReturn('A');
+        $container = new Slinpin($reflection);
+
+        $expect = 'A';
+        $actual = $container->instance('a');
         $this->assertEquals($expect, $actual);
     }
 }
