@@ -9,15 +9,23 @@
          processIsolation="false"
          stopOnFailure="false"
          syntaxCheck="false">
+
     <testsuites>
-        <testsuite>
+        <testsuite name="unit">
             <directory>test</directory>
         </testsuite>
     </testsuites>
 
-  <logging>
-    <log type="coverage-html" target="build/coverage" title="Einstein2" />
-    <log type="coverage-clover" target="build/logs/clover.xml"/>
-    <log type="junit" target="build/logs/junit.xml" logIncompleteSkipped="false"/>
-  </logging>
+    <filter>
+        <whitelist>
+            <directory>src</directory>
+            <directory>test</directory>
+        </whitelist>
+    </filter>
+
+    <logging>
+        <log type="coverage-html" target="build/coverage" title="Slinpin"/>
+        <log type="coverage-clover" target="build/logs/clover.xml"/>
+        <log type="junit" target="build/logs/junit.xml" logIncompleteSkipped="false"/>
+    </logging>
 </phpunit>
