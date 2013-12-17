@@ -2,11 +2,11 @@
 
 namespace Test\Slinpin;
 
+use Mockery;
 use PHPUnit_Framework_TestCase;
 use Slinpin\ReflectionContainer;
 use Slinpin\Slinpin;
 use Slinpin\TypeResolver;
-use Mockery;
 
 class SlinpinTest extends PHPUnit_Framework_TestCase
 {
@@ -99,11 +99,22 @@ class SlinpinTest extends PHPUnit_Framework_TestCase
     public function testInstance()
     {
         $reflection = Mockery::mock('Slinpin\ReflectionContainer');
-        $reflection->shouldReceive('instance')->andReturn('A');
-        $container = new Slinpin($reflection);
-
+        $container  = new Slinpin($reflection);
+        $reflection->shouldReceive('instance')->with('a', $container)->andReturn('A');
         $expect = 'A';
         $actual = $container->instance('a');
+        $this->assertEquals($expect, $actual);
+    }
+
+    public function testCall()
+    {
+        $callback    = function () {
+        };
+        $reflection = Mockery::mock('Slinpin\ReflectionContainer');
+        $container  = new Slinpin($reflection);
+        $reflection->shouldReceive('call')->with($callback, $container)->andReturn('A');
+        $expect = 'A';
+        $actual = $container->call($callback);
         $this->assertEquals($expect, $actual);
     }
 }
