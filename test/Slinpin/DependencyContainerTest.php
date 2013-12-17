@@ -3,7 +3,7 @@
 namespace Test\Slinpin;
 
 use PHPUnit_Framework_TestCase;
-use Slinpin\DependencyContainer;
+use Slinpin\Slinpin;
 use Slinpin\FactoryProvider;
 use Slinpin\ReflectionContainer;
 use Slinpin\TypeResolver;
@@ -12,7 +12,7 @@ class DependencyContainerTest extends PHPUnit_Framework_TestCase
 {
     public function testValue()
     {
-        $container = new DependencyContainer(new ReflectionContainer(new TypeResolver()));
+        $container = new Slinpin(new ReflectionContainer(new TypeResolver()));
 
         $container->value('a', 'A');
 
@@ -27,7 +27,7 @@ class DependencyContainerTest extends PHPUnit_Framework_TestCase
             return $current++;
         };
 
-        $container = new DependencyContainer(new ReflectionContainer(new TypeResolver()));
+        $container = new Slinpin(new ReflectionContainer(new TypeResolver()));
 
         $container->callback('a', $callback, false);
 
@@ -43,7 +43,7 @@ class DependencyContainerTest extends PHPUnit_Framework_TestCase
             return $current++;
         };
 
-        $container = new DependencyContainer(new ReflectionContainer(new TypeResolver()));
+        $container = new Slinpin(new ReflectionContainer(new TypeResolver()));
 
         $container->value('Slinpin\TypeResolver', new TypeResolver());
 
@@ -55,7 +55,7 @@ class DependencyContainerTest extends PHPUnit_Framework_TestCase
 
     public function testInstanceNoCache()
     {
-        $container = new DependencyContainer(new ReflectionContainer(new TypeResolver()));
+        $container = new Slinpin(new ReflectionContainer(new TypeResolver()));
 
         $container->factory('a', 'Slinpin\TypeResolver', false);
 
@@ -64,10 +64,28 @@ class DependencyContainerTest extends PHPUnit_Framework_TestCase
 
     public function testInstance()
     {
-        $container = new DependencyContainer(new ReflectionContainer(new TypeResolver()));
+        $container = new Slinpin(new ReflectionContainer(new TypeResolver()));
 
         $container->factory('a', 'Slinpin\TypeResolver');
 
         $this->assertSame($container->provide('a'), $container->provide('a'));
+    }
+
+    public function testInvoke()
+    {
+        $callback = function (TypeResolver $resolver) {
+            return $resolver;
+        };
+
+        $resolver = new TypeResolver();
+
+        $expect = ['Slinpin\TypeResolver'];
+
+        $container = new Slinpin(new ReflectionContainer(new TypeResolver()));
+        $container->value('ReflectionFunctionAbstract', new \ReflectionFunction($callback));
+
+        $actual = $container->invoke($resolver, 'resolveMethod');
+
+        $this->assertEquals($expect, $actual);
     }
 }

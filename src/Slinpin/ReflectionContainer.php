@@ -53,7 +53,7 @@ class ReflectionContainer
         return $this->reflection_methods[$key];
     }
 
-    public function instance($class_name, DependencyContainer $dependencies)
+    public function instance($class_name, Slinpin $dependencies)
     {
         $reflection = $this->reflectionClass($class_name);
 
@@ -64,7 +64,7 @@ class ReflectionContainer
         return $reflection->newInstanceArgs($parameters);
     }
 
-    public function invoke($object, $method_name, DependencyContainer $dependencies)
+    public function invoke($object, $method_name, Slinpin $dependencies)
     {
         $reflection = $this->reflectionMethod(get_class($object), $method_name);
 
@@ -72,10 +72,10 @@ class ReflectionContainer
 
         $parameters = $dependencies->provideAll($keys);
 
-        return $reflection->invoke($parameters);
+        return $reflection->invokeArgs($object, $parameters);
     }
 
-    public function call($callback, DependencyContainer $dependencies)
+    public function call(callable $callback, Slinpin $dependencies)
     {
         $reflection = new \ReflectionFunction($callback);
 

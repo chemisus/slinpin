@@ -13,7 +13,7 @@ class CachedProvider implements Provider
         $this->provider = $provider;
     }
 
-    public function provide(DependencyContainer $container)
+    public function provide(Slinpin $container)
     {
         if (!$this->cached) {
             $this->value  = $this->provider->provide($container);

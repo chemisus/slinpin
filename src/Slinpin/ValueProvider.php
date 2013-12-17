@@ -11,7 +11,7 @@ class ValueProvider implements Provider
         $this->value = $value;
     }
 
-    public function provide(DependencyContainer $container)
+    public function provide(Slinpin $container)
     {
         return $this->value;
     }

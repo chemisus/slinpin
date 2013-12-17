@@ -24,7 +24,7 @@ class FactoryProvider implements Provider
         $this->reflection_container = $reflection_container;
     }
 
-    public function provide(DependencyContainer $container)
+    public function provide(Slinpin $container)
     {
         return $this->reflection_container->instance($this->class_name, $container);
     }
