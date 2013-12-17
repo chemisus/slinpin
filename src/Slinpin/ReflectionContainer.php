@@ -10,7 +10,7 @@ class ReflectionContainer
     private $reflection_classes = [];
 
     /**
-     * @var \ReflectionFunctionAbstract[]
+     * @var \ReflectionMethod[]
      */
     private $reflection_methods = [];
 
@@ -72,6 +72,17 @@ class ReflectionContainer
 
         $parameters = $dependencies->provideAll($keys);
 
-        return $reflection->newInstanceArgs($parameters);
+        return $reflection->invoke($parameters);
+    }
+
+    public function call($callback, DependencyContainer $dependencies)
+    {
+        $reflection = new \ReflectionFunction($callback);
+
+        $keys = $this->type_resolver->resolveMethod($reflection);
+
+        $parameters = $dependencies->provideAll($keys);
+
+        return $reflection->invoke($parameters);
     }
 }
