@@ -4,6 +4,7 @@ namespace Test\Slinpin;
 
 use Mockery;
 use PHPUnit_Framework_TestCase;
+use Slinpin\DependencyDoesNotExistException;
 use Slinpin\ReflectionContainer;
 use Slinpin\Slinpin;
 use Slinpin\TypeResolver;
@@ -81,7 +82,6 @@ class SlinpinTest extends PHPUnit_Framework_TestCase
     public function testInvoke()
     {
         $callback = function (TypeResolver $resolver) {
-            return $resolver;
         };
 
         $resolver = new TypeResolver();
@@ -116,5 +116,20 @@ class SlinpinTest extends PHPUnit_Framework_TestCase
         $expect = 'A';
         $actual = $container->call($callback);
         $this->assertEquals($expect, $actual);
+    }
+
+    public function testGet()
+    {
+        $reflection = Mockery::mock('Slinpin\ReflectionContainer');
+        $container  = new Slinpin($reflection);
+
+        $exception = null;
+        try {
+            $container->get('a');
+        } catch (\Exception $e) {
+            $exception = $e;
+        }
+
+        $this->assertInstanceOf('\Slinpin\DependencyDoesNotExistException', $exception);
     }
 }
