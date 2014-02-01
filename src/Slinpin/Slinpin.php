@@ -2,7 +2,9 @@
 
 namespace Slinpin;
 
-class Slinpin implements InjectableDependencyContainer
+use Needle\DependencyContainer;
+
+class Slinpin implements DependencyContainer
 {
     /**
      * @var Provider[]
@@ -17,8 +19,14 @@ class Slinpin implements InjectableDependencyContainer
     /**
      * @param ReflectionContainer $reflection_container
      */
-    public function __construct(ReflectionContainer $reflection_container)
+    public function __construct(ReflectionContainer $reflection_container = null)
     {
+        if ($reflection_container === null) {
+            $reflection_container = new ReflectionContainer(
+                new TypeResolver()
+            );
+        }
+
         $this->reflection_container = $reflection_container;
     }
 

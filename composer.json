@@ -9,6 +9,7 @@
         }
     ],
     "require": {
+        "chemisus/needle": "dev-master"
     },
     "require-dev": {
         "phpunit/phpunit": "*",
