@@ -7,6 +7,10 @@ class ProviderBuilder implements Provider
     private $interface;
     private $provider;
 
+    /**
+     * @param Provider $provider
+     * @param $interface
+     */
     public function __construct(Provider $provider, $interface)
     {
         $this->provider = $provider;
@@ -15,7 +19,7 @@ class ProviderBuilder implements Provider
 
     /**
      * @param Decorator $decoration
-     * @return ProviderDecorator
+     * @return $this
      */
     public function decorator(Decorator $decoration)
     {
@@ -24,6 +28,21 @@ class ProviderBuilder implements Provider
         return $this;
     }
 
+    /**
+     * @param Resolver $resolver
+     * @return $this
+     */
+    public function resolver(Resolver $resolver)
+    {
+        $this->provider = new ProviderResolution($this->provider, $resolver);
+
+        return $this;
+    }
+
+    /**
+     * @param Container $container
+     * @return mixed
+     */
     public function provide(Container $container)
     {
         return $this->provider->provide($container);

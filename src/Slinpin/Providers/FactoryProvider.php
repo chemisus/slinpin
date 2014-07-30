@@ -1,6 +1,9 @@
 <?php
 
-namespace Slinpin;
+namespace Slinpin\Providers;
+
+use Slinpin\Provider;
+use Slinpin\Container;
 
 class FactoryProvider implements Provider
 {

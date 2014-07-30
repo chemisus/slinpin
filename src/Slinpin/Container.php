@@ -6,6 +6,10 @@ use ReflectionClass;
 use ReflectionFunction;
 use ReflectionFunctionAbstract;
 use ReflectionMethod;
+use Slinpin\Providers\BindProvider;
+use Slinpin\Providers\CallbackProvider;
+use Slinpin\Providers\FactoryProvider;
+use Slinpin\Providers\InstanceProvider;
 
 class Container
 {
