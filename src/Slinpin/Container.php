@@ -169,22 +169,22 @@ class Container
 
     /**
      * @param Provider $provider
-     * @return ProviderDecorator
+     * @param $interface
+     * @return ProviderBuilder
      */
-    public function decorator(Provider $provider)
+    public function builder(Provider $provider, $interface)
     {
-        return $this->withInstance('Slinpin\Provider', $provider)
-            ->make('Slinpin\ProviderDecorator');
+        return new ProviderBuilder($provider, $interface);
     }
 
     /**
      * @param $interface
      * @param $instance
-     * @return ProviderDecorator
+     * @return ProviderBuilder
      */
     public function instance($interface, $instance)
     {
-        $provider = $this->decorator(new InstanceProvider($instance));
+        $provider = $this->builder(new InstanceProvider($instance), $interface);
 
         $this->provider($interface, $provider);
 
@@ -208,11 +208,11 @@ class Container
     /**
      * @param $interface
      * @param $callback
-     * @return ProviderDecorator
+     * @return ProviderBuilder
      */
     public function callback($interface, $callback)
     {
-        $provider = $this->decorator(new CallbackProvider($callback));
+        $provider = $this->builder(new CallbackProvider($callback), $interface);
 
         $this->provider($interface, $provider);
 
@@ -237,11 +237,11 @@ class Container
      * @param $interface
      * @param $class
      * @param string $method
-     * @return ProviderDecorator
+     * @return ProviderBuilder
      */
     public function factory($interface, $class, $method = 'make')
     {
-        $provider = $this->decorator(new FactoryProvider($class, $method));
+        $provider = $this->builder(new FactoryProvider($class, $method), $interface);
 
         $this->provider($interface, $provider);
 
@@ -266,11 +266,11 @@ class Container
     /**
      * @param $interface
      * @param $class
-     * @return ProviderDecorator
+     * @return ProviderBuilder
      */
     public function bind($interface, $class)
     {
-        $provider = $this->decorator(new BindProvider($class));
+        $provider = $this->builder(new BindProvider($class), $interface);
 
         $this->provider($interface, $provider);
 

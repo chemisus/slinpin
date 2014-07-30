@@ -2,46 +2,50 @@
 
 namespace Example1;
 
-use Container;
+use Slinpin\Container as Container;
+use Slinpin\Decorator;
 
 require_once dirname(__DIR__) . '/vendor/autoload.php';
 
-class_alias('Slinpin\Container', 'Container');
-
 interface Foo
 {
-    public function id();
+    public function foo();
 }
 
 class FooBar implements Foo
 {
-    private $id;
-
-    public function __construct($id)
+    public function foo()
     {
-        echo __METHOD__ . '(' . substr(json_encode(func_get_args()), 1, -1) . ")\n";
+        return 'foobar';
+    }
+}
 
-        $this->id = $id;
+class FooBarDecoration implements Foo
+{
+    private $foo;
+
+    public function __construct(Foo $foo)
+    {
+        $this->foo = $foo;
     }
 
-    public function id()
+    public function foo()
     {
-        return $this->id;
+        return 'FOO' . $this->foo->foo();
+    }
+}
+
+class FooBarDecorator implements Decorator
+{
+    public function decorate(Container $container, $provided)
+    {
+        return new FooBarDecoration($provided);
     }
 }
 
 $container = new Container();
 
-$container->instance(__NAMESPACE__ . '\Foo', new FooBar(1));
+$container->bind(__NAMESPACE__ . '\Foo', __NAMESPACE__ . '\FooBar')
+    ->decorator(new FooBarDecorator());
 
-$container->call(function (Foo $foo) {
-    echo $foo->id() . "\n";
-});
-
-$container->call(function (Foo $foo) {
-    echo $foo->id() . "\n";
-});
-
-$container->call(function (Foo $foo) {
-    echo $foo->id() . "\n";
-});
+echo $container->make(__NAMESPACE__ . '\Foo')->foo() . "\n";

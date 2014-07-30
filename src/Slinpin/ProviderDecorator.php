@@ -4,39 +4,25 @@ namespace Slinpin;
 
 class ProviderDecorator implements Provider
 {
-    /**
-     * @var Provider
-     */
     private $provider;
+    private $decoration;
     private $interface;
 
-    /**
-     * @param $interface
-     * @param Provider $provider
-     */
-    public function __construct($interface, Provider $provider)
+    public function __construct(Provider $provider, $interface, Decorator $decoration)
     {
-        $this->interface = $interface;
         $this->provider = $provider;
+        $this->interface = $interface;
+        $this->decoration = $decoration;
     }
 
-    /**
-     * @param Decoration $decoration
-     * @return $this
-     */
-    public function decorate(Decoration $decoration)
-    {
-        $this->provider = new Decorator($this->provider, $decoration);
-
-        return $this;
-    }
-
-    /**
-     * @param Container $container
-     * @return mixed
-     */
     public function provide(Container $container)
     {
-        return $this->provider->provide($container);
+        $decorated = $this->decoration->decorate($container, $this->provider->provide($container));
+
+        if (!$decorated instanceof $this->interface) {
+            throw new \Exception('Must be an instance of ' . $this->interface);
+        }
+
+        return $decorated;
     }
 }
